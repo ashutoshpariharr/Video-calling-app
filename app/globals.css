@@ -115,6 +115,13 @@
   .cl-internal-wndgbp:hover{
     color: white;
   }
+  .cl-internal-1k948qj[data-variant="outline"] {
+    color: white;
+    background-color: rgba(43, 43, 204, 0.427);
+  }
+  .cl-internal-kxc0ik{
+    color: white
+  }
 
   @layer base {
     * {

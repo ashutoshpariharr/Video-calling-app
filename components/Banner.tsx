@@ -1,5 +1,4 @@
 import React from 'react'
-// import heroBackground from "../public/images/hero-background.png"; 
 
 function Banner() {
 

@@ -5,14 +5,56 @@ import Banner from '@/components/Banner';
 import CardMeeting from '@/components/CardMeeting';
 import MeetingDialog from '@/components/dialog/MeetingDialog';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@clerk/nextjs';
+import { useStreamVideoClient } from '@stream-io/video-react-sdk';
 
 function HomePage() {
   const [meetingState, setMeetingState] = useState<'isScheduleMeeting' | 'isJoiningMeeting' | 'isInstantMeeting' | undefined>(undefined);
+  const [value, setValue] = useState({
+    dateTime: new Date(),
+    description: '',
+    link: ''
+  })
+  const [callDeatails, setCallDeatails] = useState()
 
   const router = useRouter();
 
-  const meetingpopDialog = () => {
-    console.log('Clicked meeting');
+  const user = useUser();
+  const client = useStreamVideoClient();
+
+  const meetingpopDialog = async() => {
+
+    if(!client || !user ) return;
+
+    try {
+
+      const id = crypto.randomUUID();
+      const call = client.call('default', id);
+      if(!call) throw new Error('call is not connected');
+
+      const startAt = value.dateTime.toISOString() || new Date(Date.now()).toISOString();
+      const description = value.description || 'Instant meeting';
+
+      await call.getOrCreate({
+        data:{
+          starts_at: startAt,
+          custom:{
+            description
+          }
+        }
+      })
+
+      setCallDeatails(call);
+
+      if(!value.description) {
+        router.push(`/meeting/${call.id}`);
+      }
+
+      
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
   return (

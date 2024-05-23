@@ -1,10 +1,13 @@
+import StreamProviders from '@/app/provider/StreamProviders'
 import React, { ReactNode } from 'react'
 
-function RootLayout({children}: {children: ReactNode}) {
+function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <div>
-      {children}
-    </div>
+    <StreamProviders>
+      <main>
+        {children}
+      </main>
+    </StreamProviders>
   )
 }
 
